@@ -1,0 +1,624 @@
+---
+// SiteForge World Clock — internal caller tool
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SiteForge · World Clock</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --forge: #E8440A;
+      --forge-dim: #f0652e18;
+      --forge-glow: #E8440A22;
+      --ink: #0F0F0F;
+      --ink-soft: #1c1c1c;
+      --muted: #6B6B6B;
+      --muted-light: #999;
+      --border: #E2E2E2;
+      --border-strong: #CACACA;
+      --bg: #FAFAFA;
+      --card: #FFFFFF;
+      --green: #16a34a;
+      --green-bg: #f0fdf4;
+      --red: #dc2626;
+      --red-bg: #fef2f2;
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── HEADER BAR ─── */
+    header {
+      background: var(--ink);
+      padding: 0 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #fff;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--forge);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .header-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 300;
+      color: #555;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ─── HERO STRIP: Ljubljana + Manila ─── */
+    .hero-strip {
+      background: var(--ink-soft);
+      border-bottom: 2px solid var(--forge);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 2.5rem 3rem;
+      gap: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-strip::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 100% at 50% 50%, #E8440A08, transparent);
+      pointer-events: none;
+    }
+
+    .hero-city {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .hero-city.right { text-align: right; align-items: flex-end; }
+
+    .city-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--forge);
+    }
+
+    .city-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #aaa;
+      letter-spacing: 0.02em;
+    }
+
+    .city-time {
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 400;
+      color: #FFFFFF;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .city-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: #666;
+      letter-spacing: 0.06em;
+      margin-top: 0.2rem;
+    }
+
+    .hero-divider {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .divider-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, var(--forge), transparent);
+    }
+
+    .divider-icon {
+      font-size: 1.2rem;
+      opacity: 0.4;
+    }
+
+    /* ─── MAIN CONTENT ─── */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem 4rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── TIMEZONE GRID ─── */
+    .tz-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--border);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .tz-card {
+      background: var(--card);
+      padding: 1.8rem 1.6rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: background 0.15s;
+      position: relative;
+    }
+
+    .tz-card:hover { background: #FDFDFD; }
+
+    .tz-card.open {
+      background: var(--green-bg);
+    }
+
+    .tz-card.closed {
+      background: var(--red-bg);
+    }
+
+    .tz-card.warning {
+      background: var(--amber-bg);
+    }
+
+    .tz-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .tz-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .tz-status {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+    }
+
+    .status-open {
+      background: #dcfce7;
+      color: var(--green);
+    }
+
+    .status-closed {
+      background: #fee2e2;
+      color: var(--red);
+    }
+
+    .status-warning {
+      background: #fef3c7;
+      color: var(--amber);
+    }
+
+    .tz-time {
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(2rem, 3vw, 3rem);
+      font-weight: 400;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+
+    .tz-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 300;
+      color: var(--muted-light);
+      letter-spacing: 0.04em;
+    }
+
+    .tz-states {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      font-weight: 300;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-top: 0.4rem;
+      line-height: 1.5;
+    }
+
+    .tz-offset {
+      position: absolute;
+      bottom: 1rem;
+      right: 1.4rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--border-strong);
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--muted-light);
+      letter-spacing: 0.1em;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─── LIVE DOT ─── */
+    .live-dot {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: var(--forge);
+      border-radius: 50%;
+      margin-right: 0.4rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .hero-strip { padding: 1.8rem 1.5rem; }
+      .tz-grid { grid-template-columns: repeat(2, 1fr); }
+      header { padding: 0 1.5rem; }
+      main { padding: 2rem 1rem 3rem; }
+    }
+
+    @media (max-width: 500px) {
+      .tz-grid { grid-template-columns: 1fr; }
+      .hero-strip { grid-template-columns: 1fr; text-align: center; }
+      .hero-city.right { text-align: center; align-items: center; }
+      .hero-divider { flex-direction: row; }
+      .divider-line { width: 60px; height: 1px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <span class="logo-dot"></span>
+      SITEFORGE
+    </div>
+    <div class="header-label">Caller Dashboard</div>
+  </header>
+
+  <!-- HERO: Ljubljana + Manila -->
+  <div class="hero-strip">
+    <div class="hero-city left">
+      <span class="city-label">Home Base</span>
+      <span class="city-name">Ljubljana, Slovenia</span>
+      <div class="city-time" id="lj-time">--:--:--</div>
+      <div class="city-date" id="lj-date">---</div>
+    </div>
+
+    <div class="hero-divider">
+      <div class="divider-line"></div>
+      <span class="divider-icon">🌐</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="hero-city right">
+      <span class="city-label">Caller Team</span>
+      <span class="city-name">Manila, Philippines</span>
+      <div class="city-time" id="mn-time">--:--:--</div>
+      <div class="city-date" id="mn-date">---</div>
+    </div>
+  </div>
+
+  <!-- US TIMEZONES -->
+  <main>
+    <div class="section-header">
+      <span class="section-title">
+        <span class="live-dot"></span>US Time Zones
+      </span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="tz-grid">
+      <!-- Eastern -->
+      <div class="tz-card" id="card-eastern">
+        <div class="tz-top">
+          <span class="tz-name">Eastern</span>
+          <span class="tz-status" id="status-eastern">—</span>
+        </div>
+        <div class="tz-time"><span id="time-eastern">--:--</span></div>
+        <div class="tz-date" id="date-eastern">---</div>
+        <div class="tz-states">
+          Connecticut · Delaware · Florida · Georgia · Indiana (most) ·
+          Kentucky (most) · Maine · Maryland · Massachusetts · Michigan ·
+          New Hampshire · New Jersey · New York · North Carolina · Ohio ·
+          Pennsylvania · Rhode Island · South Carolina · Tennessee (east) ·
+          Vermont · Virginia · Washington D.C. · West Virginia
+        </div>
+        <span class="tz-offset">UTC−5/−4</span>
+      </div>
+
+      <!-- Central -->
+      <div class="tz-card" id="card-central">
+        <div class="tz-top">
+          <span class="tz-name">Central</span>
+          <span class="tz-status" id="status-central">—</span>
+        </div>
+        <div class="tz-time"><span id="time-central">--:--</span></div>
+        <div class="tz-date" id="date-central">---</div>
+        <div class="tz-states">
+          Alabama · Arkansas · Illinois · Iowa · Kansas · Louisiana ·
+          Minnesota · Mississippi · Missouri · Nebraska · North Dakota (most) ·
+          Oklahoma · South Dakota (east) · Tennessee (west) · Texas · Wisconsin
+        </div>
+        <span class="tz-offset">UTC−6/−5</span>
+      </div>
+
+      <!-- Mountain -->
+      <div class="tz-card" id="card-mountain">
+        <div class="tz-top">
+          <span class="tz-name">Mountain</span>
+          <span class="tz-status" id="status-mountain">—</span>
+        </div>
+        <div class="tz-time"><span id="time-mountain">--:--</span></div>
+        <div class="tz-date" id="date-mountain">---</div>
+        <div class="tz-states">
+          Colorado · Idaho (south) · Kansas (west) · Montana ·
+          Nebraska (west) · New Mexico · North Dakota (southwest) ·
+          Oregon (east) · South Dakota (west) · Utah · Wyoming
+        </div>
+        <span class="tz-offset">UTC−7/−6</span>
+      </div>
+
+      <!-- Arizona (no DST) -->
+      <div class="tz-card" id="card-arizona">
+        <div class="tz-top">
+          <span class="tz-name">Arizona <span style="font-size:0.55rem;font-weight:400;color:var(--muted)">NO DST</span></span>
+          <span class="tz-status" id="status-arizona">—</span>
+        </div>
+        <div class="tz-time"><span id="time-arizona">--:--</span></div>
+        <div class="tz-date" id="date-arizona">---</div>
+        <div class="tz-states">
+          Arizona · No daylight saving time · Always UTC−7 year-round
+        </div>
+        <span class="tz-offset">UTC−7</span>
+      </div>
+
+      <!-- Pacific -->
+      <div class="tz-card" id="card-pacific">
+        <div class="tz-top">
+          <span class="tz-name">Pacific</span>
+          <span class="tz-status" id="status-pacific">—</span>
+        </div>
+        <div class="tz-time"><span id="time-pacific">--:--</span></div>
+        <div class="tz-date" id="date-pacific">---</div>
+        <div class="tz-states">
+          California · Idaho (north) · Nevada · Oregon (west) · Washington
+        </div>
+        <span class="tz-offset">UTC−8/−7</span>
+      </div>
+
+      <!-- Alaska -->
+      <div class="tz-card" id="card-alaska">
+        <div class="tz-top">
+          <span class="tz-name">Alaska</span>
+          <span class="tz-status" id="status-alaska">—</span>
+        </div>
+        <div class="tz-time"><span id="time-alaska">--:--</span></div>
+        <div class="tz-date" id="date-alaska">---</div>
+        <div class="tz-states">
+          Alaska · 4 hours behind Eastern
+        </div>
+        <span class="tz-offset">UTC−9/−8</span>
+      </div>
+
+      <!-- Hawaii -->
+      <div class="tz-card" id="card-hawaii">
+        <div class="tz-top">
+          <span class="tz-name">Hawaii <span style="font-size:0.55rem;font-weight:400;color:var(--muted)">NO DST</span></span>
+          <span class="tz-status" id="status-hawaii">—</span>
+        </div>
+        <div class="tz-time"><span id="time-hawaii">--:--</span></div>
+        <div class="tz-date" id="date-hawaii">---</div>
+        <div class="tz-states">
+          Hawaii · No daylight saving time · Always UTC−10 year-round
+        </div>
+        <span class="tz-offset">UTC−10</span>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span>SITEFORGE · INTERNAL USE ONLY · AUTO-UPDATES EVERY SECOND</span>
+  </footer>
+
+  <script>
+    // ─── CALLING HOURS: 8:00 AM – 9:00 PM local time ───
+    function getCallStatus(hour, minute) {
+      const totalMin = hour * 60 + minute;
+      const open = 8 * 60;       // 8:00 AM
+      const close = 21 * 60;     // 9:00 PM
+      const warnBefore = 30;     // warn 30 min before close
+
+      if (totalMin < open) return 'closed';
+      if (totalMin >= close) return 'closed';
+      if (totalMin >= (close - warnBefore)) return 'warning';
+      return 'open';
+    }
+
+    function statusLabel(status) {
+      if (status === 'open') return 'CALL NOW';
+      if (status === 'warning') return 'CLOSING';
+      return 'DO NOT CALL';
+    }
+
+    function statusClass(status) {
+      if (status === 'open') return 'status-open';
+      if (status === 'warning') return 'status-warning';
+      return 'status-closed';
+    }
+
+    function cardClass(status) {
+      if (status === 'open') return 'tz-card open';
+      if (status === 'warning') return 'tz-card warning';
+      return 'tz-card closed';
+    }
+
+    function formatTime(date, tz) {
+      return new Intl.DateTimeFormat('en-US', {
+        timeZone: tz,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      }).format(date);
+    }
+
+    function formatDate(date, tz) {
+      return new Intl.DateTimeFormat('en-US', {
+        timeZone: tz,
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric'
+      }).format(date);
+    }
+
+    function getHourMinute(date, tz) {
+      const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz,
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: false
+      }).formatToParts(date);
+      const h = parseInt(parts.find(p => p.type === 'hour')?.value ?? '0');
+      const m = parseInt(parts.find(p => p.type === 'minute')?.value ?? '0');
+      return { h, m };
+    }
+
+    const zones = [
+      { id: 'eastern',  tz: 'America/New_York' },
+      { id: 'central',  tz: 'America/Chicago' },
+      { id: 'mountain', tz: 'America/Denver' },
+      { id: 'arizona',  tz: 'America/Phoenix' },
+      { id: 'pacific',  tz: 'America/Los_Angeles' },
+      { id: 'alaska',   tz: 'America/Anchorage' },
+      { id: 'hawaii',   tz: 'Pacific/Honolulu' },
+    ];
+
+    function tick() {
+      const now = new Date();
+
+      // Ljubljana
+      document.getElementById('lj-time').textContent = formatTime(now, 'Europe/Ljubljana');
+      document.getElementById('lj-date').textContent = formatDate(now, 'Europe/Ljubljana');
+
+      // Manila
+      document.getElementById('mn-time').textContent = formatTime(now, 'Asia/Manila');
+      document.getElementById('mn-date').textContent = formatDate(now, 'Asia/Manila');
+
+      // US Zones — 24h military time
+      for (const { id, tz } of zones) {
+        const { h, m } = getHourMinute(now, tz);
+        const status = getCallStatus(h, m);
+
+        // 24h format HH:MM (no seconds on zone cards)
+        const timeStr = new Intl.DateTimeFormat('en-GB', {
+          timeZone: tz,
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        }).format(now);
+
+        document.getElementById(`time-${id}`).textContent = timeStr;
+        document.getElementById(`date-${id}`).textContent = formatDate(now, tz);
+
+        const statusEl = document.getElementById(`status-${id}`);
+        statusEl.textContent = statusLabel(status);
+        statusEl.className = `tz-status ${statusClass(status)}`;
+
+        const cardEl = document.getElementById(`card-${id}`);
+        cardEl.className = cardClass(status);
+      }
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+
+</body>
+</html>
