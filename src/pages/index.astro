@@ -7,6 +7,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SiteForge · Caller Dashboard</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -31,7 +32,7 @@
       --amber-border: rgba(245,158,11,0.25);
     }
 
-    html { font-size: 16px; }
+    html { font-size: 18px; }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -84,8 +85,8 @@
     }
 
     .logo-icon {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       border-radius: 8px;
       background: linear-gradient(135deg, var(--brand), var(--brand-cyan));
       display: flex;
@@ -97,21 +98,21 @@
     .logo-icon span {
       font-family: 'Manrope', sans-serif;
       font-weight: 800;
-      font-size: 13px;
+      font-size: 15px;
       color: #fff;
     }
 
     .logo-text {
       font-family: 'Manrope', sans-serif;
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 1.1rem;
       color: #fff;
       letter-spacing: 0.02em;
     }
 
     .nav-badge {
       font-family: 'Inter', sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       font-weight: 500;
       color: rgba(255,255,255,0.35);
       letter-spacing: 0.08em;
@@ -153,7 +154,7 @@
 
     .city-label {
       font-family: 'Inter', sans-serif;
-      font-size: 0.7rem;
+      font-size: 0.85rem;
       font-weight: 600;
       letter-spacing: 0.16em;
       text-transform: uppercase;
@@ -162,7 +163,7 @@
 
     .city-name {
       font-family: 'Manrope', sans-serif;
-      font-size: 1.05rem;
+      font-size: 1.3rem;
       font-weight: 600;
       color: rgba(255,255,255,0.5);
     }
@@ -178,7 +179,7 @@
 
     .city-date {
       font-family: 'Inter', sans-serif;
-      font-size: 0.85rem;
+      font-size: 1rem;
       color: rgba(255,255,255,0.3);
       margin-top: 0.2rem;
     }
@@ -241,7 +242,7 @@
 
     .section-title {
       font-family: 'Inter', sans-serif;
-      font-size: 0.72rem;
+      font-size: 0.9rem;
       font-weight: 600;
       letter-spacing: 0.18em;
       text-transform: uppercase;
@@ -253,8 +254,8 @@
     }
 
     .live-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: var(--brand);
       flex-shrink: 0;
@@ -308,11 +309,11 @@
 
     .tz-name {
       font-family: 'Manrope', sans-serif;
-      font-size: 0.78rem;
+      font-size: 1rem;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
+      color: rgba(255,255,255,0.55);
       display: flex;
       align-items: center;
       gap: 0.4rem;
@@ -320,23 +321,23 @@
 
     .no-dst-tag {
       font-family: 'Inter', sans-serif;
-      font-size: 0.55rem;
+      font-size: 0.65rem;
       font-weight: 600;
       letter-spacing: 0.06em;
-      color: rgba(255,255,255,0.22);
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      padding: 0.1rem 0.3rem;
+      color: rgba(255,255,255,0.28);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 0.15rem 0.4rem;
       border-radius: 3px;
     }
 
     .tz-status {
       font-family: 'Inter', sans-serif;
-      font-size: 0.62rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      padding: 0.2rem 0.55rem;
+      padding: 0.25rem 0.65rem;
       border-radius: 5px;
     }
 
@@ -346,7 +347,7 @@
 
     .tz-time {
       font-family: 'Manrope', sans-serif;
-      font-size: clamp(1.9rem, 2.8vw, 2.7rem);
+      font-size: clamp(2rem, 3vw, 3rem);
       font-weight: 800;
       color: #fff;
       letter-spacing: -0.02em;
@@ -355,17 +356,18 @@
 
     .tz-date {
       font-family: 'Inter', sans-serif;
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.28);
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.35);
       margin-bottom: 0.3rem;
     }
 
     .tz-states {
       font-family: 'Inter', sans-serif;
-      font-size: 0.82rem;
+      font-size: 0.9rem;
       font-weight: 400;
-      color: rgba(255,255,255,0.5);
-      line-height: 1.8;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.85;
     }
 
     .tz-offset {
@@ -373,9 +375,9 @@
       bottom: 0.85rem;
       right: 1.25rem;
       font-family: 'Inter', sans-serif;
-      font-size: 0.68rem;
+      font-size: 0.8rem;
       font-weight: 500;
-      color: rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.25);
       letter-spacing: 0.04em;
     }
 
@@ -387,9 +389,9 @@
       padding: 1.5rem 1rem 2rem;
       border-top: 1px solid var(--dark-border);
       font-family: 'Inter', sans-serif;
-      font-size: 0.78rem;
+      font-size: 0.85rem;
       font-weight: 400;
-      color: rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.2);
       letter-spacing: 0.08em;
     }
 
