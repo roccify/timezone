@@ -370,6 +370,14 @@
       line-height: 1.85;
     }
 
+    .tz-partly {
+      display: block;
+      margin-top: 0.3rem;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.3);
+      font-style: italic;
+    }
+
     .tz-offset {
       position: absolute;
       bottom: 0.85rem;
@@ -468,11 +476,13 @@
         <div class="tz-time" id="time-eastern">--:--</div>
         <div class="tz-date" id="date-eastern">---</div>
         <div class="tz-states">
-          Connecticut · Delaware · Florida · Georgia · Indiana ·
-          Kentucky · Maine · Maryland · Massachusetts · Michigan ·
-          New Hampshire · New Jersey · New York · North Carolina ·
-          Ohio · Pennsylvania · Rhode Island · South Carolina ·
-          Tennessee · Vermont · Virginia · Washington D.C. · West Virginia
+          Most of the East Coast and Southeast.<br>
+          Connecticut · Delaware · Georgia · Maine · Maryland ·
+          Massachusetts · New Hampshire · New Jersey · New York ·
+          North Carolina · Ohio · Pennsylvania · Rhode Island ·
+          South Carolina · Vermont · Virginia · Washington D.C. ·
+          West Virginia<br>
+          <span class="tz-partly">Partly: Florida · Indiana · Kentucky · Michigan · Tennessee</span>
         </div>
         <span class="tz-offset">UTC−5/−4</span>
       </div>
@@ -485,9 +495,11 @@
         <div class="tz-time" id="time-central">--:--</div>
         <div class="tz-date" id="date-central">---</div>
         <div class="tz-states">
-          Alabama · Arkansas · Illinois · Iowa · Kansas · Louisiana ·
-          Minnesota · Mississippi · Missouri · Nebraska · North Dakota ·
-          Oklahoma · South Dakota · Tennessee · Texas · Wisconsin
+          Most of the Midwest and South.<br>
+          Alabama · Arkansas · Illinois · Iowa · Louisiana ·
+          Minnesota · Mississippi · Missouri · Oklahoma · Wisconsin<br>
+          <span class="tz-partly">Partly: Indiana · Kansas · Kentucky · Michigan · Nebraska ·
+          North Dakota · South Dakota · Tennessee · Texas</span>
         </div>
         <span class="tz-offset">UTC−6/−5</span>
       </div>
@@ -500,8 +512,10 @@
         <div class="tz-time" id="time-mountain">--:--</div>
         <div class="tz-date" id="date-mountain">---</div>
         <div class="tz-states">
-          Colorado · Idaho · Kansas · Montana · Nebraska ·
-          New Mexico · North Dakota · Oregon · South Dakota · Utah · Wyoming
+          Mountain states and selected western counties.<br>
+          Colorado · Montana · New Mexico · Utah · Wyoming<br>
+          <span class="tz-partly">Partly: Idaho · Kansas · Nebraska · North Dakota ·
+          Oregon · South Dakota · Texas</span>
         </div>
         <span class="tz-offset">UTC−7/−6</span>
       </div>
@@ -527,7 +541,9 @@
         <div class="tz-time" id="time-pacific">--:--</div>
         <div class="tz-date" id="date-pacific">---</div>
         <div class="tz-states">
-          California · Idaho · Nevada · Oregon · Washington
+          West Coast and Pacific states.<br>
+          California · Nevada · Washington · Oregon (most)<br>
+          <span class="tz-partly">Partly: Idaho (north)</span>
         </div>
         <span class="tz-offset">UTC−8/−7</span>
       </div>
@@ -540,7 +556,7 @@
         <div class="tz-time" id="time-alaska">--:--</div>
         <div class="tz-date" id="date-alaska">---</div>
         <div class="tz-states">
-          Alaska · 4 hours behind Eastern
+          Alaska (most of the state) · 4 hours behind Eastern (during DST)
         </div>
         <span class="tz-offset">UTC−9/−8</span>
       </div>
