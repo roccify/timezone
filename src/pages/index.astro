@@ -14,16 +14,16 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --forge: #E8440A;
-      --forge-dim: #f0652e18;
-      --forge-glow: #E8440A22;
+      --forge: #2563EB;
+      --forge-dim: #2563EB18;
+      --forge-glow: #2563EB22;
       --ink: #0F0F0F;
-      --ink-soft: #1c1c1c;
+      --ink-soft: #111827;
       --muted: #6B6B6B;
       --muted-light: #999;
       --border: #E2E2E2;
       --border-strong: #CACACA;
-      --bg: #FAFAFA;
+      --bg: #F8FAFC;
       --card: #FFFFFF;
       --green: #16a34a;
       --green-bg: #f0fdf4;
@@ -101,7 +101,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 60% 100% at 50% 50%, #E8440A08, transparent);
+      background: radial-gradient(ellipse 60% 100% at 50% 50%, #2563EB08, transparent);
       pointer-events: none;
     }
 
@@ -289,12 +289,12 @@
 
     .tz-states {
       font-family: 'DM Mono', monospace;
-      font-size: 0.62rem;
-      font-weight: 300;
-      color: var(--muted);
-      letter-spacing: 0.04em;
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--ink);
+      letter-spacing: 0.01em;
       margin-top: 0.4rem;
-      line-height: 1.5;
+      line-height: 1.7;
     }
 
     .tz-offset {
@@ -366,8 +366,8 @@
   <div class="hero-strip">
     <div class="hero-city left">
       <span class="city-label">Home Base</span>
-      <span class="city-name">Ljubljana, Slovenia</span>
-      <div class="city-time" id="lj-time">--:--:--</div>
+      <span class="city-name">Central Europe</span>
+      <div class="city-time" id="lj-time">--:--</div>
       <div class="city-date" id="lj-date">---</div>
     </div>
 
@@ -380,7 +380,7 @@
     <div class="hero-city right">
       <span class="city-label">Caller Team</span>
       <span class="city-name">Manila, Philippines</span>
-      <div class="city-time" id="mn-time">--:--:--</div>
+      <div class="city-time" id="mn-time">--:--</div>
       <div class="city-date" id="mn-date">---</div>
     </div>
   </div>
@@ -404,10 +404,10 @@
         <div class="tz-time"><span id="time-eastern">--:--</span></div>
         <div class="tz-date" id="date-eastern">---</div>
         <div class="tz-states">
-          Connecticut · Delaware · Florida · Georgia · Indiana (most) ·
-          Kentucky (most) · Maine · Maryland · Massachusetts · Michigan ·
+          Connecticut · Delaware · Florida · Georgia · Indiana ·
+          Kentucky · Maine · Maryland · Massachusetts · Michigan ·
           New Hampshire · New Jersey · New York · North Carolina · Ohio ·
-          Pennsylvania · Rhode Island · South Carolina · Tennessee (east) ·
+          Pennsylvania · Rhode Island · South Carolina · Tennessee ·
           Vermont · Virginia · Washington D.C. · West Virginia
         </div>
         <span class="tz-offset">UTC−5/−4</span>
@@ -423,8 +423,8 @@
         <div class="tz-date" id="date-central">---</div>
         <div class="tz-states">
           Alabama · Arkansas · Illinois · Iowa · Kansas · Louisiana ·
-          Minnesota · Mississippi · Missouri · Nebraska · North Dakota (most) ·
-          Oklahoma · South Dakota (east) · Tennessee (west) · Texas · Wisconsin
+          Minnesota · Mississippi · Missouri · Nebraska · North Dakota ·
+          Oklahoma · South Dakota · Tennessee · Texas · Wisconsin
         </div>
         <span class="tz-offset">UTC−6/−5</span>
       </div>
@@ -438,9 +438,9 @@
         <div class="tz-time"><span id="time-mountain">--:--</span></div>
         <div class="tz-date" id="date-mountain">---</div>
         <div class="tz-states">
-          Colorado · Idaho (south) · Kansas (west) · Montana ·
-          Nebraska (west) · New Mexico · North Dakota (southwest) ·
-          Oregon (east) · South Dakota (west) · Utah · Wyoming
+          Colorado · Idaho · Kansas · Montana ·
+          Nebraska · New Mexico · North Dakota ·
+          Oregon · South Dakota · Utah · Wyoming
         </div>
         <span class="tz-offset">UTC−7/−6</span>
       </div>
@@ -468,7 +468,7 @@
         <div class="tz-time"><span id="time-pacific">--:--</span></div>
         <div class="tz-date" id="date-pacific">---</div>
         <div class="tz-states">
-          California · Idaho (north) · Nevada · Oregon (west) · Washington
+          California · Idaho · Nevada · Oregon · Washington
         </div>
         <span class="tz-offset">UTC−8/−7</span>
       </div>
@@ -504,7 +504,7 @@
   </main>
 
   <footer>
-    <span>SITEFORGE · INTERNAL USE ONLY · AUTO-UPDATES EVERY SECOND</span>
+    <span>SITEFORGE · INTERNAL USE ONLY</span>
   </footer>
 
   <script>
@@ -544,7 +544,6 @@
         timeZone: tz,
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit',
         hour12: false
       }).format(date);
     }
@@ -583,7 +582,7 @@
     function tick() {
       const now = new Date();
 
-      // Ljubljana
+      // Central Europe
       document.getElementById('lj-time').textContent = formatTime(now, 'Europe/Ljubljana');
       document.getElementById('lj-date').textContent = formatDate(now, 'Europe/Ljubljana');
 
